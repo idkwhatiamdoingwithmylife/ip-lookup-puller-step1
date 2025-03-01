@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Box with Changing Colors</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            animation: rainbowBG 5s linear infinite;
+        }
+        @keyframes rainbowBG {
+            0% { background: red; }
+            16% { background: orange; }
+            33% { background: yellow; }
+            50% { background: green; }
+            66% { background: blue; }
+            83% { background: indigo; }
+            100% { background: violet; }
+        }
+        #dvd {
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="dvd">Made By i_love_python123.<br>On Discord</div>
+
+    <script>
+        const dvd = document.getElementById('dvd');
+        let x = 100, y = 100;
+        let dx = 4, dy = 4; // Speed
+
+        function getRandomColor() {
+            return `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+        }
+
+        function moveDVD() {
+            const rect = dvd.getBoundingClientRect();
+            let bounced = false;
+
+            if (x + rect.width >= window.innerWidth || x <= 0) {
+                dx *= -1;
+                bounced = true;
+            }
+            if (y + rect.height >= window.innerHeight || y <= 0) {
+                dy *= -1;
+                bounced = true;
+            }
+
+            if (bounced) {
+                dvd.style.background = getRandomColor();
+            }
+
+            x += dx;
+            y += dy;
+            dvd.style.left = x + 'px';
+            dvd.style.top = y + 'px';
+            requestAnimationFrame(moveDVD);
+        }
+
+        moveDVD();
+    </script>
+</body>
+</html>
