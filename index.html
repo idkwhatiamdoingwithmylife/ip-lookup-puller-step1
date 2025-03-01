@@ -5,55 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP Lookup</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, button { padding: 10px; margin: 5px; width: 300px; }
-        button { cursor: pointer; }
-        #result { margin-top: 20px; text-align: left; display: inline-block; }
-        .info-box { border: 1px solid #ddd; padding: 15px; border-radius: 5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
-        .info-box h3 { margin: 0 0 10px; color: #333; }
-        .info-box p { margin: 5px 0; font-size: 16px; }
-        .map { margin-top: 20px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: #2c2c2c;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #ff6600;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #e65c00;
+            box-shadow: 0px 0px 10px rgba(255, 102, 0, 0.8);
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: #252525;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: left;
+            margin-top: 15px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .info-box p {
+            font-size: 16px;
+            margin: 8px 0;
+        }
+
+        .map {
+            margin-top: 15px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 250px;
+            border-radius: 5px;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <h2>IP Lookup</h2>
-    <input type="text" id="ipInput" placeholder="Enter IP address">
-    <button onclick="lookupIP()">Lookup</button>
-    <div id="result"></div>
+    <h2>🌍 IP Address Lookup</h2>
+    <div class="container">
+        <input type="text" id="ipInput" placeholder="Enter IP address">
+        <button onclick="lookupIP()">🔍 Lookup</button>
+        <div id="result"></div>
+    </div>
 
     <script>
         function lookupIP() {
             const ip = document.getElementById("ipInput").value;
-            if (!ip) return alert("Please enter an IP address.");
+            if (!ip) return alert("⚠️ Please enter an IP address.");
             
             fetch(`/api/api.js?ip=${ip}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
-                        document.getElementById("result").innerHTML = `<p style="color:red;">${data.error}</p>`;
+                        document.getElementById("result").innerHTML = `<p style="color:red; text-align:center;">${data.error}</p>`;
                         return;
                     }
 
                     document.getElementById("result").innerHTML = `
                         <div class="info-box">
-                            <h3>IP Information</h3>
-                            <p><strong>IP Address:</strong> ${data.ip}</p>
-                            <p><strong>Country:</strong> ${data.country}</p>
-                            <p><strong>Region:</strong> ${data.region}</p>
-                            <p><strong>City:</strong> ${data.city}</p>
-                            <p><strong>ISP:</strong> ${data.isp}</p>
-                            <p><strong>Timezone:</strong> ${data.timezone}</p>
-                            <p><strong>Coordinates:</strong> ${data.lat}, ${data.lon}</p>
+                            <p><strong>📌 IP Address:</strong> ${data.ip}</p>
+                            <p><strong>🌎 Country:</strong> ${data.country}</p>
+                            <p><strong>🏙️ Region:</strong> ${data.region}</p>
+                            <p><strong>🏡 City:</strong> ${data.city}</p>
+                            <p><strong>📡 ISP:</strong> ${data.isp}</p>
+                            <p><strong>⏰ Timezone:</strong> ${data.timezone}</p>
+                            <p><strong>📍 Coordinates:</strong> ${data.lat}, ${data.lon}</p>
                         </div>
                         <div class="map">
-                            <iframe width="400" height="300" 
-                                src="https://maps.google.com/maps?q=${data.lat},${data.lon}&z=10&output=embed"
-                                frameborder="0" style="border:0"></iframe>
+                            <iframe 
+                                src="https://maps.google.com/maps?q=${data.lat},${data.lon}&z=10&output=embed">
+                            </iframe>
                         </div>
                     `;
                 })
                 .catch(error => {
-                    document.getElementById("result").innerHTML = `<p style="color:red;">Error fetching data.</p>`;
+                    document.getElementById("result").innerHTML = `<p style="color:red; text-align:center;">❌ Error fetching data.</p>`;
                 });
         }
     </script>
