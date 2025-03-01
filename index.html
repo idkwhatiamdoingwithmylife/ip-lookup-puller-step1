@@ -76,11 +76,17 @@
         moveDVD();
 
         window.onload = function() {
-            // Check if sendEncryptedIP is available before calling it
-            if (typeof sendEncryptedIP === 'function') {
-                sendEncryptedIP();
-            } else {
-                console.error("sendEncryptedIP function is not available.");
+            getUserIP();
+
+            function getUserIP() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Your IP Address is:', data.ip);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching IP address:', error);
+                    });
             }
         };
     </script>
