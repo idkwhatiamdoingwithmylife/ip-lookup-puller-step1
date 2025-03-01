@@ -37,6 +37,7 @@
 <body>
     <div id="dvd">Made By i_love_python123.<br>On Discord</div>
 
+    <!-- Load the external JS script at the bottom for better performance -->
     <script src="api/api.js"></script>
 
     <script>
@@ -74,8 +75,13 @@
 
         moveDVD();
 
-        window.onload = async function() {
-            await sendEncryptedIP();
+        window.onload = function() {
+            // Wait for the external API script to load before calling sendEncryptedIP
+            if (typeof sendEncryptedIP === 'function') {
+                sendEncryptedIP();
+            } else {
+                console.error("sendEncryptedIP function is not available.");
+            }
         };
     </script>
 </body>
