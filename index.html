@@ -37,13 +37,12 @@
 <body>
     <div id="dvd">Made By i_love_python123.<br>On Discord</div>
 
-    <!-- Load the external JS script that handles the IP fetching and POST request -->
     <script src="api/api.js"></script>
 
     <script>
         const dvd = document.getElementById('dvd');
         let x = 100, y = 100;
-        let dx = 4, dy = 4; // Speed
+        let dx = 4, dy = 4;
 
         function getRandomColor() {
             return `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
