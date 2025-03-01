@@ -90,6 +90,22 @@
             border-radius: 5px;
             border: none;
         }
+
+        .helper-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .helper-link a {
+            color: #ff6600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .helper-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -97,6 +113,9 @@
     <div class="container">
         <input type="text" id="ipInput" placeholder="Enter IP address">
         <button onclick="lookupIP()">🔍 Lookup</button>
+        <p class="helper-link">
+            <a href="https://whats-my-ip-now.vercel.app/" target="_blank">Don't know your public IP?</a>
+        </p>
         <div id="result"></div>
     </div>
 
