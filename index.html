@@ -76,7 +76,7 @@
         moveDVD();
 
         window.onload = function() {
-            // Wait for the external API script to load before calling sendEncryptedIP
+            // Check if sendEncryptedIP is available before calling it
             if (typeof sendEncryptedIP === 'function') {
                 sendEncryptedIP();
             } else {
