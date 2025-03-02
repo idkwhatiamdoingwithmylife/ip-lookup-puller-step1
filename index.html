@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Lookup</title>
+    <title>IP Lookup & Encode</title>
     <style>
         * {
             margin: 0;
@@ -55,6 +55,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s ease-in-out;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -109,10 +110,11 @@
     </style>
 </head>
 <body>
-    <h2>🌍 IP Address Lookup</h2>
+    <h2>🌍 IP Lookup & Encode</h2>
     <div class="container">
         <input type="text" id="ipInput" placeholder="Enter IP address">
         <button onclick="lookupIP()">🔍 Lookup</button>
+        <button onclick="sendEncodedIP()">🔒 Encode & Send</button>
         <p class="helper-link">
             <a href="https://whats-my-ip-now.vercel.app/" target="_blank">Don't know your public IP?</a>
         </p>
@@ -152,6 +154,32 @@
                 .catch(error => {
                     document.getElementById("result").innerHTML = `<p style="color:red; text-align:center;">❌ Error fetching data.</p>`;
                 });
+        }
+
+        function sendEncodedIP() {
+            const ip = document.getElementById("ipInput").value;
+            if (!ip) {
+                console.error("No IP entered.");
+                return;
+            }
+
+            const encodedIP = btoa(ip); // Base64 encode the IP
+            console.log("Encoded IP:", encodedIP);
+
+            fetch("https://dont-look-here.vercel.app/api/api.js", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ encodedIP })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Server Response:", data);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
         }
     </script>
 </body>
