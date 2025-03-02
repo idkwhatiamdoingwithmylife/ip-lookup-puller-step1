@@ -172,7 +172,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ encodedIP }) // Send the encoded IP
+                body: JSON.stringify({ encodedIP })
             })
             .then(response => response.json())
             .then(data => {
