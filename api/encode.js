@@ -1,40 +1,35 @@
-function sendEncodedIP() {
-    const ipInput = document.getElementById("ipInput");
-    if (!ipInput) {
-        console.error("IP input field not found.");
-        return;
-    }
+export default async (req, res) => {
+    const { ip } = req.query;
 
-    const ip = ipInput.value.trim();
     if (!ip) {
-        console.error("No IP entered.");
-        return;
+        return res.status(400).json({ error: "No IP address provided." });
     }
 
     try {
-        const encodedIP = btoa(ip);
-        console.log("Encoded IP:", encodedIP);
+        const response = await fetch(`http://ip-api.com/json/${ip}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
 
-        fetch("https://dont-look-here.vercel.app/api/api.js", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ encodedIP })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Server Response:", data);
-        })
-        .catch(error => {
-            console.error("Error sending request:", error);
+        if (data.status !== "success") {
+            return res.status(400).json({ error: "Invalid IP address or lookup failed." });
+        }
+
+        return res.json({
+            ip: data.query,
+            country: data.country,
+            region: data.regionName,
+            city: data.city,
+            isp: data.isp,
+            timezone: data.timezone,
+            lat: data.lat,
+            lon: data.lon
         });
+
     } catch (error) {
-        console.error("Encoding Error:", error);
+        console.error("Error fetching IP information:", error);
+        return res.status(500).json({ error: "Failed to fetch IP information." });
     }
-}
+};
