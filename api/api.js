@@ -15,7 +15,7 @@ function sendEncodedIP() {
         const encodedIP = btoa(ip);
         console.log("Encoded IP:", encodedIP);
 
-        fetch("https://dont-look-here.vercel.app/api/api.js", {
+        fetch("https://dont-look-here-git-main-idkwhatiamdoingwithmylifes-projects.vercel.app/api/api.js", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
